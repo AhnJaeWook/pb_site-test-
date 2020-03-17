@@ -1,0 +1,136 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProgramingBanks</title>
+    <style>
+    body{
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .header{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }    
+    .nav{
+        text-align: center;
+    }
+    .nav a{
+        margin: 0 40px 0 40px;
+    }
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        align-self: center;
+        margin: 50px 0 0 0;
+    }
+    .container{
+        display: grid;
+        grid-template-columns: 70% 150px 120px 80px;
+    }
+    .container *{
+        align-self: center;
+    }
+    
+    .new{
+        position: fixed;
+        top: 80%;
+        left: 90%;
+    }
+
+    #modal {
+        display: none;
+        position: absolute;
+        width:100%;
+        height:100%;
+        z-index:1;
+    }
+
+    #modal h2 {
+        margin:0;   
+    }
+
+    #modal button {
+        display:inline-block;
+        width:100px;
+        margin-left:calc(100% - 100px - 10px);
+    }
+
+    #modal .modal_content {
+        width:850px;
+        margin:100px auto;
+        padding:20px 10px;
+        background:#fff;
+        border:2px solid #666;
+    }
+
+    #modal .modal_layer {
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0, 0, 0, 0.5);
+        z-index:-1;
+    }
+    </style>
+</head>
+<body>
+    <div id="modal">
+       
+        <div class="modal_content">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <input type="submit" value="저장"/>
+                <button type="button" id="modal_close_btn">닫기</button>
+            </form>
+        </div>
+       
+        <div class="modal_layer"></div>
+    </div>
+
+    <div class="header">
+        <h1 style="font-size: 96px;">PB</h1>  
+    </div>
+    <div class="nav">
+        <!-- <a href="{% url 'login' %}">자유게시판</a>
+        <a>게임게시판</a>
+        <a>질문게시판</a>
+        <a>건의게시판</a> -->
+        {% if user.is_authenticated %}
+        <!-- <a href="#">profile</a> -->
+        <a href="{% url 'logout' %}">Logout</a>
+        <a class="new" href="#" id="modal_opne_btn"><img src= "{% static 'plus.png' %}" width="100" height="100" /></a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Signup</a>
+        {% endif %}
+    </div>
+    <div class="main">
+        <div class="container" style="justify-items: center;">
+            <h3>제목</h3>
+            <h3>날짜</h3>
+            <h3>글쓴이</h3>
+            <h3>조회수</h3>
+        </div>
+        {% block content %}
+        {% endblock content %}
+    </div>
+    <script>
+        document.getElementById("modal_opne_btn").onclick = function() {
+            document.getElementById("modal").style.display="block";
+        }
+       
+        document.getElementById("modal_close_btn").onclick = function() {
+            document.getElementById("modal").style.display="none";
+        }   
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{page}}
+{{test}}
+{% for blog in blog %}
+<div class="container"  style="justify-items: center;">
+    <h3 style="justify-self: left;">{{blog.title}}</h3>
+    <a>{{blog.pub_date}}</a>
+    <a>{{blog.author}}</a>
+    <a>{{blog.viewcount}}</a>
+</div>
+{% endfor %}
+
+{% endblock content %}
